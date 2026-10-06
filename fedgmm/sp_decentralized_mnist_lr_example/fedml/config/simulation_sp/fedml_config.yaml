@@ -1,0 +1,228 @@
+# ########################### For STEP ############################
+# common_args:
+#   training_type: "simulation"
+#   using_mlops: false
+#   random_seed: 0
+#   config_version: "release"
+#   mlops_api_key: f5b88f5dca344e6faf17809139b89c48
+#   mlops_project_name: sp_fedavg_test
+#   mlops_run_name: fedml_torch_fedavg_mnist_lr
+
+# data_args:
+#   # dataset: "cifar10_x"
+#   # dataset: "femnist_xz"
+#   dataset: "step"
+#   data_cache_dir: "data"
+#   partition_method: "hetero"
+#   partition_alpha: 0.5
+
+# model_args:
+#   model: "lr"
+
+# # train_args: #BEST WORKING GDA-FB
+# #   federated_optimizer: "FedAvg"
+# #   client_id_list: "[]"
+# #   client_num_in_total: 1000
+# #   client_num_per_round: 10
+# #   comm_round: 1500
+# #   epochs: 7
+# #   batch_size: 0
+# #   # client_optimizer: ogda
+# #   client_optimizer: sgd
+# #   learning_rate: 0.03 # previous tried 0.01 which failed
+# #   weight_decay: 0.02 #critic_multiplier was 15 and server lr= 1.0
+
+# # train_args: # BEST RUN OGDA-FB
+# #   federated_optimizer: "FedAvg"
+# #   client_id_list: "[]"
+# #   client_num_in_total: 1000
+# #   client_num_per_round: 10
+# #   comm_round: 1500
+# #   epochs: 7
+# #   batch_size: 0
+# #   client_optimizer: ogda
+# #   # client_optimizer: sgd
+# #   learning_rate: 0.01
+# #   weight_decay: 0.02 #critic_multiplier was 15 and server_lr=1.5
+
+# train_args: #BEST WORKING SGDA
+#   federated_optimizer: "FedAvg"
+#   client_id_list: "[]"
+#   client_num_in_total: 1000
+#   client_num_per_round: 10
+#   comm_round: 1500
+#   epochs: 7
+#   batch_size: 256
+#   # client_optimizer: ogda
+#   client_optimizer: sgd
+#   learning_rate: 0.03 
+#   weight_decay: 0.02 #critic_multiplier was 15 and server lr= 1.5
+
+
+# # train_args: # BEST RUN OGDA
+# #   federated_optimizer: "FedAvg"
+# #   client_id_list: "[]"
+# #   client_num_in_total: 1000
+# #   client_num_per_round: 10
+# #   comm_round: 1500
+# #   epochs: 7
+# #   batch_size: 256
+# #   client_optimizer: ogda
+# #   # client_optimizer: sgd
+# #   learning_rate: 0.01
+# #   weight_decay: 0.02 #critic_multiplier was 15 and server_lr=1.5
+
+
+
+# validation_args:
+#   frequency_of_the_test: 5
+
+# device_args:
+#   using_gpu: true
+#   gpu_id: 3
+
+# comm_args:
+#   backend: "sp"
+
+# tracking_args:
+#   enable_tracking: false
+#    # When running on MLOps platform(open.fedml.ai), the default log path is at ~/.fedml/fedml-client/fedml/logs/ and ~/.fedml/fedml-server/fedml/logs/
+#   enable_wandb: false
+#   wandb_key: ee0b5f53d949c84cee7decbe7a629e63fb2f8408
+#   wandb_entity: fedml-ai
+#   wandb_project: simulation
+#   run_name: fedml_torch_fedavg_mnist_lr
+
+
+############### For CIFAR 10 ###############
+common_args:
+  training_type: "simulation"
+  using_mlops: false
+  random_seed: 0
+  config_version: "release"
+  mlops_api_key: \"\"
+  mlops_project_name: sp_fedavg_test
+  mlops_run_name: fedml_torch_fedavg_mnist_lr
+
+data_args:
+  # dataset: "cifar10_xz"
+  # dataset: "femnist_xz"
+  dataset: "abs"
+  data_cache_dir: "data"
+  partition_method: "hetero"
+  partition_alpha: 0.5
+
+model_args:
+  model: "lr"
+
+# train_args: #SGDA-Best working
+#   federated_optimizer: "FedAvg"
+#   client_id_list: "[]"
+#   client_num_in_total: 1000
+#   client_num_per_round: 10
+#   comm_round: 1500
+#   epochs: 7
+#   batch_size: 256
+#   # client_optimizer: ogda
+#   client_optimizer: sgd
+#   learning_rate: 0.003
+#   weight_decay: 0.03
+
+# train_args: #OGDA-Bestworking
+#   federated_optimizer: "FedAvg"
+#   client_id_list: "[]"
+#   client_num_in_total: 1000
+#   client_num_per_round: 10
+#   comm_round: 1500
+#   epochs: 7
+#   batch_size: 256
+#   client_optimizer: ogda
+#   # client_optimizer: sgd
+#   learning_rate: 0.001
+#   weight_decay: 0.05  #save file-prednew0_001wd0_05.npy critic multiplier was 10 and server_lr=1.5 
+
+# train_args: #OGDA-FB
+#   federated_optimizer: "FedAvg"
+#   client_id_list: "[]"
+#   client_num_in_total: 1000
+#   client_num_per_round: 10
+#   comm_round: 1500
+#   epochs: 7
+#   batch_size: 0
+#   client_optimizer: ogda
+#   # client_optimizer: sgd
+#   learning_rate: 0.001
+#   weight_decay: 0.001 #save file-prednewmini0001 critic multiplier 15 & server lr=1.5
+
+######TRYING MINIBATCHES
+
+train_args: #OGDA-MINIBATCH
+  federated_optimizer: "FedAvg"
+  client_id_list: "[]"
+  client_num_in_total: 1000
+  client_num_per_round: 10
+  # Parallelize independent client-local updates without changing server logic.
+  # GPU IDs are logical indices visible to this Python process.
+  enable_multiprocessing: true
+  multiprocessing_num_workers: 4
+  multiprocessing_gpu_ids: [0, 1, 2, 3]
+  # Optional third execution mode; use in a copied YAML for one-GPU tests:
+  # client_execution_mode: single_gpu_streams
+  # single_gpu_num_slots: 4
+  # single_gpu_id: 3
+  # True multiprocessing with persistent client workers on one GPU:
+  # client_execution_mode: multiprocessingsinglegpu
+  # multiprocessingsinglegpu_num_workers: 2
+  # multiprocessingsinglegpu_gpu_id: 3
+  comm_round: 500
+  epochs: 7
+  batch_size: 256
+  # client_optimizer: ogda
+  # client_optimizer: sgd
+  # client_optimizer: fed_eg
+  # client_optimizer: fed_eg_double
+  # client_optimizer: fed_zo_eg
+  learning_rate: 0.001
+  # FedEG/FedEG_double/FedZO-EG use server_learning_rate when either phase LR is null.
+  eg_predictor_server_lr: null
+  eg_corrector_server_lr: null
+  # FedZO-EG only; each direction costs two forward objective evaluations.
+  zo_mu: 0.001
+  zo_num_directions: 1
+  # Parallel client execution; backend remains sp.
+  client_execution_mode: sp
+  enable_multiprocessing: false
+  multiprocessing_num_workers: 4
+  multiprocessing_gpu_ids: [0, 1, 2, 3]
+  multiprocessingsinglegpu_num_workers: 2
+  multiprocessingsinglegpu_gpu_id: 0
+  weight_decay: 0.1  #save file-prednew0_001wd0_1.npy critic multiplier was 10 and server_lr=1.5 weight decay 0.01 earlier
+  # Two-phase server methods (choose one instead of ogda above):
+  client_optimizer: fed_eg     # exact SGD correction at server look-ahead
+  # client_optimizer: fed_zo_eg  # forward-only SPSA correction at look-ahead
+  server_learning_rate: 1.5
+  # null means use server_learning_rate for that phase.
+  eg_predictor_server_lr: null
+  eg_corrector_server_lr: null
+  # Used only by fed_zo_eg; each direction costs two objective forwards.
+  zo_mu: 0.001
+  zo_num_directions: 1
+# next try 0.03
+validation_args:
+  frequency_of_the_test: 5
+
+device_args:
+  using_gpu: true
+  gpu_id: 3
+
+comm_args:
+  backend: "sp"
+
+tracking_args:
+  enable_tracking: false
+   # When running on MLOps platform(open.fedml.ai), the default log path is at ~/.fedml/fedml-client/fedml/logs/ and ~/.fedml/fedml-server/fedml/logs/
+  enable_wandb: false
+  wandb_key: \"\"
+  wandb_entity: fedml-ai
+  wandb_project: simulation
+  run_name: fedml_torch_fedavg_mnist_lr

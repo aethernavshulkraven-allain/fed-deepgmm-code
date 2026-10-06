@@ -1,0 +1,2 @@
+data/*.npz filter=lfs diff=lfs merge=lfs -text
+fedml/data/FederatedEMNIST/datasets/* filter=lfs diff=lfs merge=lfs -text
